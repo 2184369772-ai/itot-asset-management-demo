@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}盘点管理 | IT/OT 资产管理 Demo{% endblock %}
+{% block content %}
+<section class="grid gap-6 lg:grid-cols-[0.95fr,1.05fr]">
+    <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+        <p class="text-sm font-medium text-emerald-700">盘点管理</p>
+        <h2 class="mt-1 text-2xl font-semibold">登记一条 Synthetic Data 盘点记录</h2>
+        <form method="post" action="/inventory" class="mt-6 space-y-4">
+            <select name="asset_pk" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+                {% for asset in assets %}<option value="{{ asset.id }}">{{ asset.asset_id }} - {{ asset.asset_name }}</option>{% endfor %}
+            </select>
+            <input type="date" name="inventory_date" value="{{ today }}" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+            <select name="outcome" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+                <option value="Matched">已匹配</option>
+                <option value="Location Verified">位置已确认</option>
+                <option value="Needs Review">待复核</option>
+            </select>
+            <select name="counted_location" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+                {% for item in filters_meta.locations %}<option value="{{ item }}">{{ item }}</option>{% endfor %}
+            </select>
+            <textarea name="notes" rows="4" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm" placeholder="补充本次盘点的说明，例如位置核对、标签状态或后续待处理项..."></textarea>
+            <button class="rounded-2xl bg-emerald-700 px-5 py-3 text-sm font-medium text-white hover:bg-emerald-800">保存盘点记录</button>
+        </form>
+    </article>
+
+    <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+        <h3 class="text-lg font-semibold">最近盘点记录</h3>
+        <div class="mt-4 space-y-3">
+            {% for row in inventory_records %}
+            <div class="rounded-2xl bg-stone-50 p-4">
+                <p class="font-medium">{{ row.asset_code }} - {{ row.asset_name }}</p>
+                <p class="mt-1 text-sm text-stone-500">{{ row.inventory_date }} - {{ inventory_outcome_labels.get(row.outcome, row.outcome) }} - {{ row.counted_location }}</p>
+                <p class="mt-2 text-sm text-stone-700">{{ row.notes }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </article>
+</section>
+{% endblock %}

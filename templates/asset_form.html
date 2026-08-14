@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == 'create' %}新增资产{% else %}编辑资产{% endif %} | IT/OT 资产管理 Demo{% endblock %}
+{% block content %}
+<section class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-sm font-medium text-emerald-700">{% if mode == 'create' %}新增资产{% else %}编辑资产{% endif %}</p>
+            <h2 class="mt-1 text-2xl font-semibold">{% if mode == 'create' %}录入一条 Synthetic Data 资产记录{% else %}更新当前资产信息{% endif %}</h2>
+        </div>
+        <a href="/assets" class="text-sm font-medium text-stone-600 hover:text-stone-900">返回资产台账</a>
+    </div>
+    {% if errors %}
+    <div class="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700">
+        <ul class="list-disc space-y-1 pl-5">
+            {% for error in errors %}<li>{{ error }}</li>{% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+    <form method="post" class="mt-6 grid gap-4 md:grid-cols-2" action="{% if mode == 'create' %}/assets/new{% else %}/assets/{{ asset_pk }}/edit{% endif %}">
+        <label class="space-y-2"><span class="text-sm font-medium">Asset ID</span><input type="text" name="asset_id" value="{{ form.asset_id or '' }}" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm"></label>
+        <label class="space-y-2"><span class="text-sm font-medium">资产名称</span><input type="text" name="asset_name" value="{{ form.asset_name or '' }}" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm"></label>
+        <label class="space-y-2">
+            <span class="text-sm font-medium">资产分类</span>
+            <select name="category" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+                {% for item in filters_meta.categories %}<option value="{{ item }}" {% if form.category == item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+            </select>
+        </label>
+        <label class="space-y-2">
+            <span class="text-sm font-medium">所属位置</span>
+            <select name="location" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+                {% for item in filters_meta.locations %}<option value="{{ item }}" {% if form.location == item %}selected{% endif %}>{{ item }}</option>{% endfor %}
+            </select>
+        </label>
+        <label class="space-y-2"><span class="text-sm font-medium">负责人</span><input type="text" name="owner" value="{{ form.owner or '' }}" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm"></label>
+        <label class="space-y-2">
+            <span class="text-sm font-medium">资产状态</span>
+            <select name="status" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+                {% for item in filters_meta.statuses %}<option value="{{ item }}" {% if form.status == item %}selected{% endif %}>{{ status_labels[item] }}</option>{% endfor %}
+            </select>
+        </label>
+        <label class="space-y-2"><span class="text-sm font-medium">最近盘点日期</span><input type="date" name="last_inventory_date" value="{{ form.last_inventory_date or today }}" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm"></label>
+        <label class="space-y-2 md:col-span-2"><span class="text-sm font-medium">备注</span><textarea name="notes" rows="5" class="w-full rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">{{ form.notes or '' }}</textarea></label>
+        <div class="md:col-span-2"><button class="rounded-2xl bg-emerald-700 px-5 py-3 text-sm font-medium text-white hover:bg-emerald-800">{% if mode == 'create' %}保存资产{% else %}保存修改{% endif %}</button></div>
+    </form>
+</section>
+{% endblock %}

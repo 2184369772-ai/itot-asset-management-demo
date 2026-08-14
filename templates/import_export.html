@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}导入 / 导出 | IT/OT 资产管理 Demo{% endblock %}
+{% block content %}
+<section class="grid gap-6 lg:grid-cols-2">
+    <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+        <p class="text-sm font-medium text-emerald-700">导入</p>
+        <h2 class="mt-1 text-2xl font-semibold">从 CSV / XLSX 导入 Synthetic Data 资产</h2>
+        <form method="post" action="/import-export/import" enctype="multipart/form-data" class="mt-6 rounded-2xl border border-dashed border-stone-300 bg-stone-50 p-6">
+            <input type="file" name="file" accept=".csv,.xlsx" class="block w-full text-sm">
+            <button class="mt-4 rounded-2xl bg-slate-950 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800">开始导入</button>
+        </form>
+        <div class="mt-6 rounded-2xl bg-stone-50 p-5 text-sm text-stone-600">
+            <p class="font-medium text-stone-900">必填列</p>
+            <p class="mt-2 font-mono text-xs">Asset ID, Asset Name, Category, Location, Owner, Status, Last Inventory Date, Notes</p>
+        </div>
+        {% if import_summary %}
+        <div class="mt-6 rounded-2xl border border-stone-200 bg-white p-5 text-sm">
+            <p class="font-medium">成功导入：{{ import_summary.imported }}</p>
+            <div class="mt-3 space-y-1 text-stone-600">
+                {% for item in import_summary.skipped %}<p>{{ item }}</p>{% else %}<p>没有被跳过的行。</p>{% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </article>
+    <article class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+        <p class="text-sm font-medium text-emerald-700">导出</p>
+        <h2 class="mt-1 text-2xl font-semibold">导出当前资产台账</h2>
+        <div class="mt-6 space-y-4">
+            <a href="/import-export/export.csv" class="block rounded-2xl bg-emerald-700 px-5 py-4 text-center text-sm font-medium text-white hover:bg-emerald-800">导出 CSV</a>
+            <a href="/import-export/export.xlsx" class="block rounded-2xl bg-slate-950 px-5 py-4 text-center text-sm font-medium text-white hover:bg-slate-800">导出 XLSX</a>
+        </div>
+    </article>
+</section>
+{% endblock %}

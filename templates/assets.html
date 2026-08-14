@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}资产台账 | IT/OT 资产管理 Demo{% endblock %}
+{% block content %}
+<section class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-stone-200">
+    <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+        <div>
+            <p class="text-sm font-medium text-emerald-700">资产台账</p>
+            <h2 class="mt-1 text-2xl font-semibold">检索、筛选并维护 Synthetic Data 资产记录</h2>
+        </div>
+        <a href="/assets/new" class="rounded-2xl bg-emerald-700 px-5 py-3 text-sm font-medium text-white hover:bg-emerald-800">新增资产</a>
+    </div>
+    <form method="get" action="/assets" class="mt-6 grid gap-3 lg:grid-cols-5">
+        <input type="text" name="q" value="{{ query.q }}" placeholder="搜索 Asset ID、资产名称、负责人" class="rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm lg:col-span-2">
+        <select name="category" class="rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+            <option value="">全部分类</option>
+            {% for item in filters_meta.categories %}
+            <option value="{{ item }}" {% if query.category == item %}selected{% endif %}>{{ item }}</option>
+            {% endfor %}
+        </select>
+        <select name="status" class="rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+            <option value="">全部状态</option>
+            {% for item in filters_meta.statuses %}
+            <option value="{{ item }}" {% if query.status == item %}selected{% endif %}>{{ status_labels[item] }}</option>
+            {% endfor %}
+        </select>
+        <select name="location" class="rounded-2xl border border-stone-300 bg-stone-50 px-4 py-3 text-sm">
+            <option value="">全部位置</option>
+            {% for item in filters_meta.locations %}
+            <option value="{{ item }}" {% if query.location == item %}selected{% endif %}>{{ item }}</option>
+            {% endfor %}
+        </select>
+        <button class="rounded-2xl bg-slate-950 px-5 py-3 text-sm font-medium text-white hover:bg-slate-800">应用筛选</button>
+    </form>
+</section>
+
+<section class="mt-6 overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-stone-200">
+    <div class="overflow-x-auto">
+        <table class="min-w-full text-left text-sm">
+            <thead class="bg-stone-50 text-stone-500">
+                <tr>
+                    <th class="px-6 py-4">资产</th>
+                    <th class="px-6 py-4">分类</th>
+                    <th class="px-6 py-4">位置</th>
+                    <th class="px-6 py-4">负责人</th>
+                    <th class="px-6 py-4">状态</th>
+                    <th class="px-6 py-4">最近盘点</th>
+                    <th class="px-6 py-4"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for asset in assets %}
+                <tr class="border-t border-stone-100">
+                    <td class="px-6 py-4">
+                        <p class="font-medium">{{ asset.asset_name }}</p>
+                        <p class="text-xs text-stone-500">{{ asset.asset_id }}</p>
+                    </td>
+                    <td class="px-6 py-4">{{ asset.category }}</td>
+                    <td class="px-6 py-4">{{ asset.location }}</td>
+                    <td class="px-6 py-4">{{ asset.owner }}</td>
+                    <td class="px-6 py-4">{{ status_labels[asset.status] }}</td>
+                    <td class="px-6 py-4">{{ asset.last_inventory_date }}</td>
+                    <td class="px-6 py-4 text-right"><a class="font-medium text-emerald-700 hover:underline" href="/assets/{{ asset.id }}">查看详情</a></td>
+                </tr>
+                {% else %}
+                <tr><td colspan="7" class="px-6 py-10 text-center text-stone-500">当前筛选条件下没有匹配的资产。</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
