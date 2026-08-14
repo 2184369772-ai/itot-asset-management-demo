@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}IT/OT 资产管理 Demo{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="/static/app.css">
+</head>
+<body class="bg-stone-100 text-stone-900">
+    <div class="min-h-screen">
+        <header class="bg-slate-950 text-white shadow-lg">
+            <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 md:flex-row md:items-end md:justify-between">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.35em] text-amber-300">Synthetic Data Demo</p>
+                    <h1 class="mt-2 text-3xl font-semibold">IT/OT 资产管理系统 Demo</h1>
+                    <p class="mt-2 max-w-3xl text-sm text-slate-300">
+                        面向作品集展示的公开重实现，全部基于 Synthetic Data，不包含任何专有代码、内部数据或公司特定素材。
+                    </p>
+                </div>
+                <nav class="flex flex-wrap gap-2 text-sm">
+                    <a class="rounded-full border border-slate-700 px-4 py-2 hover:bg-slate-800" href="/">概览</a>
+                    <a class="rounded-full border border-slate-700 px-4 py-2 hover:bg-slate-800" href="/assets">资产台账</a>
+                    <a class="rounded-full border border-slate-700 px-4 py-2 hover:bg-slate-800" href="/inventory">盘点管理</a>
+                    <a class="rounded-full border border-slate-700 px-4 py-2 hover:bg-slate-800" href="/import-export">导入 / 导出</a>
+                </nav>
+            </div>
+        </header>
+        <main class="mx-auto max-w-7xl px-6 py-8">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>
