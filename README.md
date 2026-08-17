@@ -1,9 +1,15 @@
 # itot-asset-management-demo
 
+面向作品集展示的 IT/OT 资产管理公开 Demo，采用中文主界面 + 英文专业标签，展示“纸质 / Excel 台账如何被系统化”为可运行的资产管理系统。
+
 Public reimplementation of an IT/OT asset management system using synthetic data.
 
 > This repository is a public reimplementation using synthetic data.
 > It contains no proprietary code, internal data, confidential materials, or company-specific assets.
+
+## Demo Preview
+
+![ITOT Asset Management Demo Preview](docs/screenshots/asset-detail-qr.png)
 
 `itot-asset-management-demo` is a FastAPI + SQLite portfolio demo that shows how a paper / Excel-based asset ledger can be turned into a runnable IT/OT asset management system.
 
